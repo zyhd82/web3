@@ -47,7 +47,7 @@ func PrintOddEven() {
 	go func() {
 		defer wg.Done()
 		fmt.Println("输出偶数序列：")
-		for i := 2; i < 10; i += 2 {
+		for i := 2; i <= 10; i += 2 {
 			fmt.Println(i)
 		}
 	}()
