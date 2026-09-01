@@ -39,11 +39,6 @@ go test ./...          # 跑全部单元测试（不连数据库）
 swag init -g cmd/server/main.go -o docs
 ```
 
-## 项目结构与规范
-
-- 面向 Claude Code / 后续开发的架构说明、编码规范：见 [`CLAUDE.md`](./CLAUDE.md)
-- 数据库设计规范：见 [`docs/DATABASE_CONVENTIONS.md`](./docs/DATABASE_CONVENTIONS.md)
-
 ## API 概览
 
 | 方法   | 路径                          | 说明               | 需要登录 |
