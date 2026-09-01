@@ -1,0 +1,624 @@
+basePath: /api/v1
+definitions:
+  dto.ChangePasswordRequest:
+    properties:
+      newPassword:
+        minLength: 8
+        type: string
+      oldPassword:
+        type: string
+    required:
+    - newPassword
+    - oldPassword
+    type: object
+  dto.CommentResponse:
+    properties:
+      author:
+        type: string
+      authorId:
+        type: integer
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      postId:
+        type: integer
+    type: object
+  dto.CreateCommentRequest:
+    properties:
+      content:
+        maxLength: 2000
+        type: string
+    required:
+    - content
+    type: object
+  dto.CreatePostRequest:
+    properties:
+      content:
+        type: string
+      title:
+        maxLength: 255
+        type: string
+    required:
+    - content
+    - title
+    type: object
+  dto.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  dto.LoginResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/dto.UserResponse'
+    type: object
+  dto.PostResponse:
+    properties:
+      author:
+        type: string
+      authorId:
+        type: integer
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  dto.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      username:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  dto.UpdatePostRequest:
+    properties:
+      content:
+        type: string
+      title:
+        maxLength: 255
+        type: string
+    type: object
+  dto.UpdateProfileRequest:
+    properties:
+      avatar:
+        maxLength: 255
+        type: string
+      bio:
+        maxLength: 255
+        type: string
+      nickname:
+        maxLength: 50
+        type: string
+    type: object
+  dto.UserResponse:
+    properties:
+      avatar:
+        type: string
+      bio:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      nickname:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    type: object
+  response.Body:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+  response.PageData:
+    properties:
+      list: {}
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      total:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: Go + Gin + GORM 实现的个人博客后端微服务，提供用户认证、文章管理、评论管理接口。
+  title: 个人博客后端 API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: 公开接口，用户名密码登录，成功返回 JWT
+      parameters:
+      - description: 登录信息
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.LoginResponse'
+              type: object
+        "400":
+          description: 参数不合法
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: 用户名或密码错误
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: 用户登录
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: 公开接口，创建一个新用户，用户名/邮箱不能重复
+      parameters:
+      - description: 注册信息
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserResponse'
+              type: object
+        "400":
+          description: 参数不合法
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: 用户名或邮箱已被占用
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: 用户注册
+      tags:
+      - auth
+  /comments/{id}:
+    delete:
+      description: 只有作者本人或管理员可以操作
+      parameters:
+      - description: 评论 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: 未登录或登录已过期
+          schema:
+            $ref: '#/definitions/response.Body'
+        "403":
+          description: 没有权限
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: 评论不存在
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: 删除评论
+      tags:
+      - comment
+  /posts:
+    get:
+      description: 公开接口，分页返回，不含正文；?userId= 可按作者筛选
+      parameters:
+      - description: 按作者 ID 筛选
+        in: query
+        name: userId
+        type: integer
+      - description: 页码，默认 1
+        in: query
+        name: page
+        type: integer
+      - description: 每页数量，默认 10，上限 100
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageData'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.PostResponse'
+                        type: array
+                    type: object
+              type: object
+      summary: 文章列表
+      tags:
+      - post
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 文章标题/正文
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreatePostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PostResponse'
+              type: object
+        "400":
+          description: 参数不合法
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: 未登录或登录已过期
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: 创建文章
+      tags:
+      - post
+  /posts/{postId}:
+    delete:
+      description: 只有作者本人或管理员可以操作，会级联删除该文章下的全部评论
+      parameters:
+      - description: 文章 ID
+        in: path
+        name: postId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: 未登录或登录已过期
+          schema:
+            $ref: '#/definitions/response.Body'
+        "403":
+          description: 没有权限
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: 文章不存在
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: 删除文章
+      tags:
+      - post
+    get:
+      description: 公开接口
+      parameters:
+      - description: 文章 ID
+        in: path
+        name: postId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PostResponse'
+              type: object
+        "404":
+          description: 文章不存在
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: 文章详情
+      tags:
+      - post
+    put:
+      consumes:
+      - application/json
+      description: 只有作者本人或管理员可以操作
+      parameters:
+      - description: 文章 ID
+        in: path
+        name: postId
+        required: true
+        type: integer
+      - description: 要更新的字段，未提供的字段不修改
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PostResponse'
+              type: object
+        "400":
+          description: 参数不合法
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: 未登录或登录已过期
+          schema:
+            $ref: '#/definitions/response.Body'
+        "403":
+          description: 没有权限
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: 文章不存在
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: 更新文章
+      tags:
+      - post
+  /posts/{postId}/comments:
+    get:
+      description: 公开接口，分页返回
+      parameters:
+      - description: 文章 ID
+        in: path
+        name: postId
+        required: true
+        type: integer
+      - description: 页码，默认 1
+        in: query
+        name: page
+        type: integer
+      - description: 每页数量，默认 10，上限 100
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageData'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.CommentResponse'
+                        type: array
+                    type: object
+              type: object
+      summary: 文章评论列表
+      tags:
+      - comment
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 文章 ID
+        in: path
+        name: postId
+        required: true
+        type: integer
+      - description: 评论内容
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CommentResponse'
+              type: object
+        "400":
+          description: 参数不合法
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: 未登录或登录已过期
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: 文章不存在
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: 创建评论
+      tags:
+      - comment
+  /users/me:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserResponse'
+              type: object
+        "401":
+          description: 未登录或登录已过期
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: 获取当前用户资料
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 要更新的字段，未提供的字段不修改
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Body'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserResponse'
+              type: object
+        "400":
+          description: 参数不合法
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: 未登录或登录已过期
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: 更新当前用户资料
+      tags:
+      - user
+  /users/me/password:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 旧密码/新密码
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: 参数不合法
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: 未登录或旧密码错误
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: 修改当前用户密码
+      tags:
+      - user
+securityDefinitions:
+  BearerAuth:
+    description: 除标注"公开接口"外均需要登录，在请求头带上 "Bearer <token>"（token 从登录接口获取）
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

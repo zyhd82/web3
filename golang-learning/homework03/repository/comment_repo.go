@@ -10,8 +10,8 @@ import (
 type CommentRepo struct {
 }
 
-func (cp *CommentRepo) GetMostCommentsPostID() (uint, error) {
-	resultPostID := uint(0)
+func (cp *CommentRepo) GetMostCommentsPostID() (int, error) {
+	resultPostID := int(0)
 
 	// 查询评论表，按文章ID分组，按评论数降序，取第一条
 	err := configs.DB.Model(&models.Comment{}).

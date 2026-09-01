@@ -16,7 +16,7 @@ func (ur *PostRepo) GetPostListByUser(user *models.User) error {
 	return configs.DB.Preload("Posts").Preload("Posts.Comments").First(&user, user.Username).Error
 }
 
-func (ur *PostRepo) GetPostByID(id uint) (*models.Post, error) {
+func (ur *PostRepo) GetPostByID(id int) (*models.Post, error) {
 	var resultPost models.Post
 	err := configs.DB.First(&resultPost, id).Error
 	if err != nil {
