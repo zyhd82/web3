@@ -1,0 +1,13 @@
+/* Hardhat 3 推荐的 TypeScript 配置（ESM + Node 原生模块解析） */
+{
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16",
+    "outDir": "dist"
+  }
+}

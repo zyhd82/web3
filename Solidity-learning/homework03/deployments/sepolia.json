@@ -1,0 +1,57 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "deployer": "0x507d6556376A819efda673B5c271d7898239f543",
+  "feeRecipient": "0x507d6556376A819efda673B5c271d7898239f543",
+  "deployedAt": "2026-10-09T04:47:15.337Z",
+  "priceFeeds": {
+    "ETH": "0x694AA1769357215DE4FAC081bf1f309aDC325306",
+    "USDC": "0xA2F78ab2355fe2f984D808B5CeE7FD0A93D5270E"
+  },
+  "contracts": {
+    "AuctionNFT": {
+      "address": "0xB42d582Cd6ECA20357F4DB83f65484c9E945f5ac",
+      "constructorArgs": [
+        "Auction NFT",
+        "ANFT",
+        "0x507d6556376A819efda673B5c271d7898239f543"
+      ],
+      "txHash": "0x07f502682ac2edfd18dcf945becf737b150b9236989a3e32daf952e09a83d631"
+    },
+    "MockUSDC": {
+      "address": "0x160A1d6767c8d0302753c1D44DaBD08647539AED",
+      "constructorArgs": [
+        "Mock USD Coin",
+        "mUSDC",
+        6
+      ],
+      "txHash": "0xf8d60daf969e3233fe9e1deb7972331328dd8be2e99acf7878584a4b88cdb437"
+    },
+    "NFTAuctionProxy": {
+      "address": "0x63189dB992c04A3Acc6c12d69Accaafe912b5a69",
+      "constructorArgs": [
+        "0xfB9CDbE830228632EC2209481A7a8AC29D457325",
+        "0x485cc955000000000000000000000000507d6556376a819efda673b5c271d7898239f543000000000000000000000000507d6556376a819efda673b5c271d7898239f543"
+      ],
+      "txHash": "0xd95f7d6ec024fb3a395b5ae0beecf4b31d7b0607fa15774675a0928024b446f7"
+    },
+    "NFTAuctionV1": {
+      "address": "0xfB9CDbE830228632EC2209481A7a8AC29D457325",
+      "constructorArgs": [],
+      "txHash": "0x72957db648801aa5801e2cdcfcb87d91b9fcab6492179254c82e70638a581042"
+    },
+    "NFTAuctionV2": {
+      "address": "0x6c228EC3A73Db48E9dc9c2e92e32E4E9FA0567c4",
+      "constructorArgs": [],
+      "txHash": "0x593b8abc93e9eb5ea00b59f26f5ece3e4883077f3415f511ac1a39a2601e8fe2"
+    }
+  },
+  "upgrades": [
+    {
+      "version": 2,
+      "implementation": "0x6c228EC3A73Db48E9dc9c2e92e32E4E9FA0567c4",
+      "txHash": "0x848337c847cf82a0a94ca1e61510153a099742fc0662293c1ef27e22da1e1b1f",
+      "timestamp": "2026-10-09T06:55:15.371Z"
+    }
+  ]
+}

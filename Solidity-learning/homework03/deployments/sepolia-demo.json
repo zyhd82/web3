@@ -1,0 +1,71 @@
+{
+  "network": "sepolia",
+  "auctionId": "0",
+  "tokenId": "1",
+  "seller": "0x507d6556376A819efda673B5c271d7898239f543",
+  "bidder": "0x6EeD95ac2e883067413781b71FE18d54798e3E40",
+  "startedAt": "2026-10-09T06:53:25.657Z",
+  "finished": true,
+  "steps": [
+    {
+      "step": "A 铸造 NFT #1",
+      "from": "0x507d6556376A819efda673B5c271d7898239f543",
+      "txHash": "0x6f68b9ba91c3166e7f7226ffc5fca358ee7e79cb3ea34a243ca51c5125341c16",
+      "url": "https://sepolia.etherscan.io/tx/0x6f68b9ba91c3166e7f7226ffc5fca358ee7e79cb3ea34a243ca51c5125341c16"
+    },
+    {
+      "step": "A 授权拍卖合约转移 NFT #1",
+      "from": "0x507d6556376A819efda673B5c271d7898239f543",
+      "txHash": "0x6a5d0f0f1d189c7aa346f24ff4ffdf0cd3f8ceb4498740130e51905ad2c284c7",
+      "url": "https://sepolia.etherscan.io/tx/0x6a5d0f0f1d189c7aa346f24ff4ffdf0cd3f8ceb4498740130e51905ad2c284c7"
+    },
+    {
+      "step": "A 创建拍卖 #0（起拍价 $5.00，时长 900 秒，接受 ETH 与 mUSDC）",
+      "from": "0x507d6556376A819efda673B5c271d7898239f543",
+      "txHash": "0x51b280ce641485201129a27a6265718758cda6ada6be26f597832e9f8143ce9b",
+      "url": "https://sepolia.etherscan.io/tx/0x51b280ce641485201129a27a6265718758cda6ada6be26f597832e9f8143ce9b"
+    },
+    {
+      "step": "B 用 0.0025 ETH 出价（约 $6.25）",
+      "from": "0x6EeD95ac2e883067413781b71FE18d54798e3E40",
+      "txHash": "0x2ba5d71036f2ae47ba18f646a2490cf62ff01d2318818f96de6d70b0d59e9131",
+      "url": "https://sepolia.etherscan.io/tx/0x2ba5d71036f2ae47ba18f646a2490cf62ff01d2318818f96de6d70b0d59e9131"
+    },
+    {
+      "step": "B 领取 10.0 mUSDC 测试代币",
+      "from": "0x6EeD95ac2e883067413781b71FE18d54798e3E40",
+      "txHash": "0x225e2716a027c68ed27ce7debb6d8ff66769956320c40276e6573d9f838f7bd4",
+      "url": "https://sepolia.etherscan.io/tx/0x225e2716a027c68ed27ce7debb6d8ff66769956320c40276e6573d9f838f7bd4"
+    },
+    {
+      "step": "B 授权拍卖合约转移 mUSDC",
+      "from": "0x6EeD95ac2e883067413781b71FE18d54798e3E40",
+      "txHash": "0x9f63bb9e6e770bea21abd755550716555bb0314768a632903e218cfa9ee2a694",
+      "url": "https://sepolia.etherscan.io/tx/0x9f63bb9e6e770bea21abd755550716555bb0314768a632903e218cfa9ee2a694"
+    },
+    {
+      "step": "B 用 10.0 mUSDC 加价（约 $10.00）",
+      "from": "0x6EeD95ac2e883067413781b71FE18d54798e3E40",
+      "txHash": "0xf8fa9189c967f004dd011c218d3d3d3d9c226fd9075f6d26d315f023f13d67c1",
+      "url": "https://sepolia.etherscan.io/tx/0xf8fa9189c967f004dd011c218d3d3d3d9c226fd9075f6d26d315f023f13d67c1"
+    },
+    {
+      "step": "结算拍卖 #0",
+      "from": "0x507d6556376A819efda673B5c271d7898239f543",
+      "txHash": "0x4311d04a90d7753cd7d9d8980f2cadb6c4e2d3a606cbde1434fbd096066d85b2",
+      "url": "https://sepolia.etherscan.io/tx/0x4311d04a90d7753cd7d9d8980f2cadb6c4e2d3a606cbde1434fbd096066d85b2"
+    },
+    {
+      "step": "A 提现 10.0 mUSDC",
+      "from": "0x507d6556376A819efda673B5c271d7898239f543",
+      "txHash": "0xe56655971d65b864aa67dbcf19d8a80b987cb369a4094dac8799df5a053bc660",
+      "url": "https://sepolia.etherscan.io/tx/0xe56655971d65b864aa67dbcf19d8a80b987cb369a4094dac8799df5a053bc660"
+    },
+    {
+      "step": "B 提现 0.0025 ETH",
+      "from": "0x6EeD95ac2e883067413781b71FE18d54798e3E40",
+      "txHash": "0x0968ed8ecba185aaa59ae8046335637569c60481b9040186adea4db1598fbc14",
+      "url": "https://sepolia.etherscan.io/tx/0x0968ed8ecba185aaa59ae8046335637569c60481b9040186adea4db1598fbc14"
+    }
+  ]
+}
