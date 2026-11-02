@@ -44,6 +44,10 @@ func main() {
 		log.Fatalf("接收方地址无效: %q", toHex)
 	}
 	toAddress := common.HexToAddress(toHex)
+	// IsHexAddress 不拦截零地址，转到 0x0 的 ETH 将永久销毁，需显式拒绝
+	if toAddress == (common.Address{}) {
+		log.Fatal("接收方地址不能为零地址 0x0000000000000000000000000000000000000000")
+	}
 
 	value, err := ethToWei(*amountFlag)
 	if err != nil {
